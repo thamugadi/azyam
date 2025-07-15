@@ -24,7 +24,7 @@ bootinfo.txt: src/globals.fth src/lib.fth \
 	      src/memory-map.fth \
 	      src/main.fth
 	@echo "<CHRP-BOOT><COMPATIBLE>MacRisc MacRisc3 MacRisc4</COMPATIBLE><BOOT-SCRIPT>" > $@ 
-	@sed 's/>/\&gt;/g; s/</\&lt;/g' $^ >> $@
+	@sed 's/>/\&gt;/g; s/</\&lt;/g; s/&/\&amp;/g;' $^ >> $@
 	@echo "</BOOT-SCRIPT></CHRP-BOOT>" >> $@ #used for verification, let it in this format 
 	@printf "\4" >> $@
 page-loader.elf: linker.ld $(OBJECTS)
