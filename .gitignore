@@ -1,3 +1,14 @@
+
+*.elf
+*.o
+*.bin
+*.APM
+bootinfo.txt
+*.json
+*.hfs
+.cache
+
+*.idx
 # Prerequisites
 *.d
 
@@ -35,7 +46,7 @@
 *.i*86
 *.x86_64
 *.hex
-
+*.ppc
 # Debug files
 *.dSYM/
 *.su
