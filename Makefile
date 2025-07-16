@@ -20,13 +20,14 @@ DISK.APM: build/page-table-loader.elf build/bootinfo.txt kpartx/kpartx.sh
 		if [ "$$ans" = "y" ] || [ "$$ans" = "Y" ]; then $(MAKE) clean && $(MAKE); fi; \
 	fi
 build/bootinfo.txt: src/init.fth src/lib.fth \
-	      src/disk-loader.fth \
+	      src/disk.fth src/dol-loader.fth \
 	      src/memory-map.fth \
 	      src/ai.fth src/cp.fth src/di.fth src/dsp.fth src/exi.fth src/mi.fth src/pe.fth src/pi.fth src/si.fth src/vi.fth \
 	      src/gx.fth \
-	      src/paired-single.fth \
-	      src/instr-handler.fth src/mem-handler.fth \
+	      src/ps-patcher.fth \
+	      src/hwreg-patcher.fth \
 	      src/replace-handlers.fth src/restore-memory.fth \
+              src/interrupts.fth \
 	      src/main.fth
 	@echo "<CHRP-BOOT><COMPATIBLE>MacRisc MacRisc3 MacRisc4</COMPATIBLE><BOOT-SCRIPT>" > $@ 
 	@sed 's/>/\&gt;/g; s/</\&lt;/g; s/&/\&amp;/g;' $^ >> $@
