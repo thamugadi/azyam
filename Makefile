@@ -27,7 +27,7 @@ build/bootinfo.txt: src/init.fth src/lib.fth \
 	      src/ps-instr-patcher.fth \
 	      src/hwreg-patcher.fth \
 	      src/replace-handlers.fth src/restore-memory.fth \
-              src/interrupts.fth \
+              src/controller.fth src/interrupts.fth \
 	      src/main.fth
 	@echo "<CHRP-BOOT><COMPATIBLE>MacRisc MacRisc3 MacRisc4</COMPATIBLE><BOOT-SCRIPT>" > $@ 
 	@sed 's/>/\&gt;/g; s/</\&lt;/g;' $^ >> $@
@@ -36,9 +36,9 @@ build/bootinfo.txt: src/init.fth src/lib.fth \
 build/page-table-loader.elf: page-table-loader/linker.ld $(OBJECTS)
 	@mkdir -p $(@D)
 	$(PPC)-ld -T $^ -o $@
-build/%.elf: %.c
+build/%.elf: %.c page-table-loader/include/*.h
 	@mkdir -p $(@D)
-	$(PPC)-gcc -I include -c $< -o $@
+	$(PPC)-gcc -I page-table-loader/include -c $< -o $@
 build/%.elf: %.s
 	@mkdir -p $(@D)
 	$(PPC)-as -c $< -o $@

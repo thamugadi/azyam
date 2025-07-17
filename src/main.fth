@@ -14,9 +14,12 @@ type cr
 dev /aliases
 .properties
 dev /
-." enter the disk device path:" cr
+." enter the mounted disk device path (sys/ and files/ at its root):" cr
+\ dol is at sys/main.dol
 
-\ stores the disk device path as a string, as well as its size
+\ stores the disk device path as a string, as well as its size.
+\ if in the future, ISOs can be directly loaded, ask for their location and automatically set disk-device-path at their mounting point
+
 disk-device-path 100 accept
 disk-device-path-size l!
 cr

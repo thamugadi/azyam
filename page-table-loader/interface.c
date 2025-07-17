@@ -1,4 +1,5 @@
 #include <ofw.h>
+
 extern void (*ofw)();
 
 void* ofw_interpret(char* cmd, int32_t* stack_args, int n_stack_args,
@@ -34,4 +35,19 @@ void* ofw_interpret(char* cmd, int32_t* stack_args, int n_stack_args,
   }
 
   return retaddr;
+}
+
+void get_ofw_32bit(char* word, uint32_t* ret)
+{
+  static char cmd[0x200];
+
+  int len = strlen(word);
+  memcpy(cmd, word, len);
+
+  int i = len;
+  cmd[i++] = ' ';
+  cmd[i++] = 'l';
+  cmd[i++] = '@';
+  cmd[i++] = 0;
+  ofw_interpret(cmd, 0, 0, 1, (int32_t*)ret);
 }
