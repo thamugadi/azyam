@@ -1,4 +1,4 @@
-PPC = powerpc-linux-gnu
+PPC = powerpc-eabi
 SOURCES_C = $(shell find page-table-loader -name "*.c")
 SOURCES_S = $(shell find page-table-loader -name "*.s")
 OBJECTS = $(addprefix build/, $(SOURCES_C:.c=.elf) $(SOURCES_S:.s=.elf))
@@ -24,13 +24,13 @@ build/bootinfo.txt: src/init.fth src/lib.fth \
 	      src/memory-map.fth \
 	      src/ai.fth src/cp.fth src/di.fth src/dsp.fth src/exi.fth src/mi.fth src/pe.fth src/pi.fth src/si.fth src/vi.fth \
 	      src/gx.fth \
-	      src/ps-patcher.fth \
+	      src/ps-instr-patcher.fth \
 	      src/hwreg-patcher.fth \
 	      src/replace-handlers.fth src/restore-memory.fth \
               src/interrupts.fth \
 	      src/main.fth
 	@echo "<CHRP-BOOT><COMPATIBLE>MacRisc MacRisc3 MacRisc4</COMPATIBLE><BOOT-SCRIPT>" > $@ 
-	@sed 's/>/\&gt;/g; s/</\&lt;/g; s/&/\&amp;/g;' $^ >> $@
+	@sed 's/>/\&gt;/g; s/</\&lt;/g;' $^ >> $@
 	@echo "</BOOT-SCRIPT></CHRP-BOOT>" >> $@ #used for verification, let it in this format 
 	@printf "\4" >> $@
 build/page-table-loader.elf: page-table-loader/linker.ld $(OBJECTS)

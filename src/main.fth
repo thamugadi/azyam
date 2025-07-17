@@ -6,7 +6,6 @@
 page-loader-location encode-bytes
 encode+
 evaluate
-
 " loaded the page table loader at 0x" encode-bytes
 load-base (u.) encode-bytes 
 encode+
@@ -42,7 +41,8 @@ init-memory-map
 \       interrupt handler. this only if the game is actually running, will check a flag for that.
 
 \ TODO: jump to page table loader
-\ TODO: (ELF) set the "gc" flag to 1, load new page tables, jump to the game
-\ go
+\ TODO: (PTL) set the "gc" flag to 1, load new page tables, jump to the game
+
+go
 ." loop." cr
 1 0 do 0 +loop
