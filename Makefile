@@ -43,5 +43,5 @@ build/%.elf: %.s
 	@mkdir -p $(@D)
 	$(PPC)-as -c $< -o $@
 clean:
-	rm -rf *.APM *txt *.elf ./mnt
+	rm -rf *.APM *.txt *.elf ./mnt
 	rm -rf build

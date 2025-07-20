@@ -29,9 +29,11 @@ init-memory-map
 
 \ TODO: load DOL 
 
-\ TODO: store globals about the DOL for the page table loader
-
 \ TODO: write PS instructions patcher and patch paired single instrs
+
+\ TODO: patch the BAT-related instructions with NOPs
+
+
 
 \ TODO: write hardware handler. a call to it is going to be inserted at the place of the instruction that attempted once to access hwregs
 \       note that it will also handle the case where that instruction might not access to an hwreg, if executed in another execution flow
@@ -40,12 +42,13 @@ init-memory-map
 \ TODO: write hwreg access patcher (responsible for doing the patching mentioned above after each exception subsequent to a hwreg access)
 \       and redirect memory faults to it 
 
-\ TODO: patch the external interrupt handlers to emulate, if necessary, an input that is going to be handled by the gamecube's external
-\       interrupt handler. this only if the game is actually running, will check a flag for that.
+\ TODO: patch the external interrupt handlers to emulate an input that is going to be handled by the GC's external interrupt handler.
+\       verify first if OF has no problem getting those interrupt handlers rewritten.
 
-\ TODO: jump to page table loader
-\ TODO: (PTL) set the "gc" flag to 1, load new page tables, jump to the game
+\ TODO: save vaddr mapping
 
+\ jumps to page table loader
 go
+\ (PTL) set interrupts, load new page tables, jump to the game
 ." loop." cr
 1 0 do 0 +loop

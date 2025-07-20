@@ -10,7 +10,7 @@ typedef int32_t phandle;
 typedef int32_t ihandle;
 
 void* ofw_interpret(char* cmd, int32_t* stack_args, int n_stack_args, int n_ret_args, int32_t* retaddr);
-void get_ofw_32bit(char* word, uint32_t* ret); 
+void* get_ofw_32bit(char* word, uint32_t* ret); 
 void n_to_hex(uint32_t n, char* ret);
 int strlen(char* str);
 
