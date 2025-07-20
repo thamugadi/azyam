@@ -49,6 +49,6 @@ init-memory-map
 
 \ jumps to page table loader
 go
-\ (PTL) set interrupts, load new page tables, jump to the game
+\ (game-loader) load BATs, jump to the game
 ." loop." cr
 1 0 do 0 +loop

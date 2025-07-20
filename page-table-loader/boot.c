@@ -28,11 +28,4 @@ void puts(char* str, int len)
 
 int main(void)
 {
-  *(uint32_t*)0xdc000000 = 0xabcdabcd; // should raise an exception. TODO
-  ofw_interpret("true to use-console?", 0,0,0,0);
-  ofw_interpret("false to ignore-output?", 0,0,0,0);
-  ofw_interpret("stdout @ 0= if \" screen\" output install-console then", 0,0,0,0);
-  ofw_interpret("blink-screen", 0, 0, 0, 0);
-  ofw_interpret(".\" hiii from the ELF\" cr", 0,0,0,0);
-  while(1);
 }

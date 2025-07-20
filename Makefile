@@ -28,6 +28,7 @@ build/bootinfo.txt: src/init.fth src/lib.fth \
 	      src/hwreg-patcher.fth \
 	      src/replace-handlers.fth src/restore-memory.fth \
               src/controller.fth src/interrupts.fth \
+	      src/game-loader.fth \
 	      src/main.fth
 	@echo "<CHRP-BOOT><COMPATIBLE>MacRisc MacRisc3 MacRisc4</COMPATIBLE><BOOT-SCRIPT>" > $@ 
 	@sed 's/>/\&gt;/g; s/</\&lt;/g;' $^ >> $@
