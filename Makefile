@@ -1,10 +1,16 @@
 PPC = powerpc-eabi
-DISK.APM: build/bootinfo.txt kpartx/kpartx.sh
+DISK.APM: build/bootinfo.txt
 	mkdir -p ./mnt
 	dd bs=1M count=1 if=/dev/zero of=$@
 	parted $@ --script mklabel mac mkpart primary hfs+ 64s 100%
-	sudo chmod +x ./kpartx/kpartx.sh
-	sudo ./kpartx/kpartx.sh
+
+	set -e; \
+	sudo losetup -f --offset 32768 $@; \
+	LOOP=$$(sudo losetup -j $@ | grep -o '/dev/loop[0-9]*' | tail -n1); \
+	sudo mkfs.hfsplus $$LOOP; \
+	sudo mount -o loop $$LOOP ./mnt/; \
+	sudo chmod -R 777 ./mnt
+
 	mkdir -p ./mnt/ppc ./mnt/boot
 	rsync -c -h build/bootinfo.txt ./mnt/ppc/
 	sync
