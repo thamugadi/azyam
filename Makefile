@@ -1,8 +1,8 @@
 PPC = powerpc-eabi
-SOURCES_C = $(shell find page-table-loader -name "*.c")
-SOURCES_S = $(shell find page-table-loader -name "*.s")
+SOURCES_C = $(shell find bat-loader -name "*.c")
+SOURCES_S = $(shell find bat-loader -name "*.s")
 OBJECTS = $(addprefix build/, $(SOURCES_C:.c=.elf) $(SOURCES_S:.s=.elf))
-DISK.APM: build/page-table-loader.elf build/bootinfo.txt kpartx/kpartx.sh
+DISK.APM: build/bat-loader.elf build/bootinfo.txt kpartx/kpartx.sh
 	mkdir -p ./mnt
 	dd bs=1M count=1 if=/dev/zero of=$@
 	parted $@ --script mklabel mac mkpart primary hfs+ 64s 100%
@@ -10,7 +10,7 @@ DISK.APM: build/page-table-loader.elf build/bootinfo.txt kpartx/kpartx.sh
 	sudo ./kpartx/kpartx.sh
 	mkdir -p ./mnt/ppc ./mnt/boot
 	rsync -c -h build/bootinfo.txt ./mnt/ppc/
-	rsync -c -h build/page-table-loader.elf ./mnt/boot/
+	rsync -c -h build/bat-loader.elf ./mnt/boot/
 	sync
 	sudo umount ./mnt/
 	sudo kpartx -d $@ 
@@ -34,12 +34,12 @@ build/bootinfo.txt: src/init.fth src/lib.fth \
 	@sed 's/>/\&gt;/g; s/</\&lt;/g;' $^ >> $@
 	@echo "</BOOT-SCRIPT></CHRP-BOOT>" >> $@ #used for verification, let it in this format 
 	@printf "\4" >> $@
-build/page-table-loader.elf: page-table-loader/linker.ld $(OBJECTS)
+build/bat-loader.elf: bat-loader/linker.ld $(OBJECTS)
 	@mkdir -p $(@D)
 	$(PPC)-ld -T $^ -o $@
-build/%.elf: %.c page-table-loader/include/*.h
+build/%.elf: %.c bat-loader/include/*.h
 	@mkdir -p $(@D)
-	$(PPC)-gcc -I page-table-loader/include -c $< -o $@
+	$(PPC)-gcc -I bat-loader/include -c $< -o $@
 build/%.elf: %.s
 	@mkdir -p $(@D)
 	$(PPC)-as -c $< -o $@

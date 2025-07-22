@@ -28,4 +28,7 @@ void puts(char* str, int len)
 
 int main(void)
 {
+  *(uint32_t*)0x80000000 = 0xaaaaaaaa;
+  ofw_interpret("80000000 100 dump", 0, 0, 0, 0); // should freeze if GC BATs are loaded, ofw needs mac-io at 80000000
+  while (1);
 }

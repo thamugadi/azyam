@@ -1,4 +1,4 @@
-: page-loader-location " :2,\boot\page-table-loader.elf" ;
+: page-loader-location " :2,\boot\bat-loader.elf" ;
 ." main" cr
 
 \ loads the page table loader
@@ -27,7 +27,7 @@ cr
 \ allocate memory, the mapping is to be replaced by page table loader
 init-memory-map
 
-\ TODO: load DOL 
+\ TODO: load DOL (use temporary virtual addresses mapped to the paddr that is later going to be mapped to the right GC memory locations with BAT, can't be done immediately because of overlap with mac-io at 0x80000000) 
 
 \ TODO: write PS instructions patcher and patch paired single instrs
 
@@ -39,8 +39,10 @@ init-memory-map
 \       note that it will also handle the case where that instruction might not access to an hwreg, if executed in another execution flow
 \       prior to its execution, it's going to unset the "gc" flag and restore the original page tables.  
 
-\ TODO: write hwreg access patcher (responsible for doing the patching mentioned above after each exception subsequent to a hwreg access)
+\ TODO: write hwreg access patcher (responsible for doing the patching mentioned above after each DSI exception subsequent to a hwreg access)
 \       and redirect memory faults to it 
+
+\ TODO: (not very useful) write a handler for alignment exception to support (rare) unaligned memory accesses, that Broadway supports (unsure, i don't know if host architecture supports them)
 
 \ TODO: patch the external interrupt handlers to emulate an input that is going to be handled by the GC's external interrupt handler.
 \       verify first if OF has no problem getting those interrupt handlers rewritten.
@@ -48,6 +50,7 @@ init-memory-map
 \ TODO: save vaddr mapping
 
 \ jumps to page table loader
+
 go
 \ (game-loader) load BATs, jump to the game
 ." loop." cr
