@@ -1,19 +1,7 @@
-: page-loader-location " :2,\boot\bat-loader.elf" ;
-." main" cr
-
-\ loads the page table loader
-" load &device;" encode-bytes
-page-loader-location encode-bytes
-encode+
-evaluate
-" loaded the page table loader at 0x" encode-bytes
-load-base (u.) encode-bytes 
-encode+
-type cr
-
 dev /aliases
 .properties
 dev /
+
 ." enter the mounted disk device path (sys/ and files/ at its root):" cr
 \ dol is at sys/main.dol
 
@@ -34,7 +22,6 @@ init-memory-map
 \ TODO: patch the BAT-related instructions with NOPs
 
 
-
 \ TODO: write hardware handler. a call to it is going to be inserted at the place of the instruction that attempted once to access hwregs
 \       note that it will also handle the case where that instruction might not access to an hwreg, if executed in another execution flow
 \       prior to its execution, it's going to unset the "gc" flag and restore the original page tables.  
@@ -49,9 +36,9 @@ init-memory-map
 
 \ TODO: save vaddr mapping
 
-\ jumps to page table loader
 
-go
-\ (game-loader) load BATs, jump to the game
+\ TODO: make a script for asm -> forth
+load-bat-jump-to-entry
+
 ." loop." cr
 1 0 do 0 +loop

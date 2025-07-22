@@ -1,8 +1,5 @@
 PPC = powerpc-eabi
-SOURCES_C = $(shell find bat-loader -name "*.c")
-SOURCES_S = $(shell find bat-loader -name "*.s")
-OBJECTS = $(addprefix build/, $(SOURCES_C:.c=.elf) $(SOURCES_S:.s=.elf))
-DISK.APM: build/bat-loader.elf build/bootinfo.txt kpartx/kpartx.sh
+DISK.APM: build/bootinfo.txt kpartx/kpartx.sh
 	mkdir -p ./mnt
 	dd bs=1M count=1 if=/dev/zero of=$@
 	parted $@ --script mklabel mac mkpart primary hfs+ 64s 100%
@@ -10,7 +7,6 @@ DISK.APM: build/bat-loader.elf build/bootinfo.txt kpartx/kpartx.sh
 	sudo ./kpartx/kpartx.sh
 	mkdir -p ./mnt/ppc ./mnt/boot
 	rsync -c -h build/bootinfo.txt ./mnt/ppc/
-	rsync -c -h build/bat-loader.elf ./mnt/boot/
 	sync
 	sudo umount ./mnt/
 	sudo kpartx -d $@ 
@@ -28,21 +24,13 @@ build/bootinfo.txt: src/init.fth src/lib.fth \
 	      src/hwreg-patcher.fth \
 	      src/replace-handlers.fth src/restore-memory.fth \
               src/controller.fth src/interrupts.fth \
-	      src/game-loader.fth \
+	      src/load-bat-jump.fth \
 	      src/main.fth
+	@mkdir -p build
 	@echo "<CHRP-BOOT><COMPATIBLE>MacRisc MacRisc3 MacRisc4</COMPATIBLE><BOOT-SCRIPT>" > $@ 
 	@sed 's/>/\&gt;/g; s/</\&lt;/g;' $^ >> $@
 	@echo "</BOOT-SCRIPT></CHRP-BOOT>" >> $@ #used for verification, let it in this format 
 	@printf "\4" >> $@
-build/bat-loader.elf: bat-loader/linker.ld $(OBJECTS)
-	@mkdir -p $(@D)
-	$(PPC)-ld -T $^ -o $@
-build/%.elf: %.c bat-loader/include/*.h
-	@mkdir -p $(@D)
-	$(PPC)-gcc -I bat-loader/include -c $< -o $@
-build/%.elf: %.s
-	@mkdir -p $(@D)
-	$(PPC)-as -c $< -o $@
 clean:
 	rm -rf *.APM *.txt *.elf ./mnt
 	rm -rf build
