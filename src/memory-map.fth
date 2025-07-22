@@ -1,7 +1,6 @@
 \ relevant: https://el.dolphin-emu.org/blog/2016/09/06/booting-the-final-gc-game/?cr=el
 
 \ physical memory:
-unselect-dev
 create main-memory-paddr 4 allot
 create efb-paddr 4 allot
 create fake-cache-paddr 4 allot
@@ -16,12 +15,16 @@ create ipl-vaddr 4 allot
 create hwreg-vaddr 4 allot
 : init-memory-map
   
-\ 10000000 01800000 0 claim-physical main-memory-paddr l! \ 80000000
-\ 20000000 00200000 0 claim-physical efb-paddr l! \ C8000000
-\ 21000000 00004000 0 claim-physical fake-cache-paddr l! \ E0000000
-10000000
-01800000 00200000 + 00004000 +
-20000 claim-physical main-memory-paddr l!
+\ 24 MiB (MEM1) + 8 MiB of padding (32 MiB mapped in BATs instead of 24 MiB) + 2 MiB (EFB) + 16 KiB (cache) + 240 KiB of padding
+\ (256 KiB mapped in BATs instead of 16 KiB)
+
+01800000 00200000 + 00800000 + 00040000 +
+20000 \ alignment
+
+claim-physical
+main-memory-paddr l!
+
+\ TODO: error if not 0x20000-aligned
 
 \ restore-memory is supposed to bring back the ofw-created mapping each time the emulator is called by the exception handler.
 

@@ -36,8 +36,8 @@ init-memory-map
 
 \ TODO: save vaddr mapping
 
-
 \ TODO: make a script for asm -> forth
+
 load-bat-jump-to-entry
 
 ." loop." cr
