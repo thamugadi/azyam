@@ -1,5 +1,7 @@
 code load-bat-jump-to-entry
 
+\ TODO: make wimg globals
+
 \ disable interrupts
 
 7DC000A6 , \ mfmsr r14
@@ -11,9 +13,9 @@ code load-bat-jump-to-entry
 
 \ r15 <- physical address of main memory
 
-3DE00000 main-memory-paddr 32 14 - rshift or , \ lis r15, 14 upper bits of physical address (assume it's 0x20000-aligned) 
+3DE00000 main-memory-paddr l@ 32 14 - rshift or , \ lis r15, 14 upper bits of physical address (assume it's 0x20000-aligned) 
 
-\ set BAT registers
+\ invalidate BAT registers
 
 39C00000 , \ li r14, 0
 4C00012C , \ isync
@@ -25,9 +27,9 @@ code load-bat-jump-to-entry
 7DDE83A6 , \ mtdbatu 3, r14
 4C00012C , \ isync
 
-\ mapping 0x80000000 to paddr for 32 MiB
+\ map 0x80000000 to paddr for 32 MiB
 
-\ todo: figure out WIMG and how i should treat regions that are supposed to be cached
+\ todo: figure out WIMG and how i should treat regions supposed to be cached memory
 
 7DEE7B78 , \ mr r14, r15
 61CE002A , \ ori r14, r14, 0b0101010 /* WIMG=0b0101, RW */
@@ -49,7 +51,7 @@ code load-bat-jump-to-entry
 7DD883A6 , \ mtdbatu 0, r14
 4C00012C , \ isync
 
-\ mapping 0xc0000000 to paddr for 32 MiB
+\ map 0xc0000000 to paddr for 32 MiB
 
 7DEE7B78 , \ mr r14, r15
 61CE0002 , \ ori r14, r14, 0b0000010 /* WIMG=0b0000, RW */
@@ -71,7 +73,7 @@ code load-bat-jump-to-entry
 7DDA83A6 , \ mtdbatu 1, r14
 4C00012C , \ isync
 
-\ mapping 0xc8000000 to paddr+32MiB for 2 MiB
+\ map 0xc8000000 to paddr+32MiB for 2 MiB
 
 3DEF0200 , \ addis r15, r15, 0x200
 7DEE7B78 , \ mr r14, r15
@@ -85,7 +87,7 @@ code load-bat-jump-to-entry
 7DDC83A6 , \ mtdbatu 2, r14
 4C00012C , \ isync
 
-\ mapping 0xe0000000 to paddr+34MiB for 256 KiB
+\ map 0xe0000000 to paddr+34MiB for 256 KiB
 
 3DEF0020 , \ addis r15, r15, 0x20
 7DEE7B78 , \ mr r14, r15
@@ -106,9 +108,24 @@ code load-bat-jump-to-entry
 7DC00124 , \ mtmsr r14
 4C00012C , \ isync
 
-\ loop:
+\ load entry point to LR
+
+7DE802A6 , \ mflr r15 /* useless, never returns. just discard lr
+3DE00000 dol-entry-point l@ 16 rshift or , \ lis r15, dol-entry-point@ha 
+61EF0000 dol-entry-point l@ 0000ffff and or , \ ori r15, dol-entry-point@l
+7DE803A6 , \ mtlr r15
+
+\ (for testing, patch entry point to contain b $ as no DOL loading isn't implemented yet) 
+
 48000000 , \ b loop
+3DC04800 , \ lis r14, 0x4800
+91CF0000 , \ stw 14, 0(15)
 
-\ todo: jump to entry point 
+\ jump to the game
 
+4E800020 , \ blr
+
+
+\ loop:
+\ 48000000 , \ b loop
 end-code

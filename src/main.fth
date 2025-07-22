@@ -36,9 +36,11 @@ init-memory-map
 
 \ TODO: save vaddr mapping
 
-\ TODO: make a script for asm -> forth
+\ TODO: add assembler? 
 
 load-bat-jump-to-entry
+blink-screen
+80000000 100 dump
 
 ." loop." cr
 1 0 do 0 +loop
