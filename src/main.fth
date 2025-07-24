@@ -15,12 +15,6 @@ cr
 \ allocate memory, the mapping is to be replaced by page table loader
 init-memory-map
 
-dol-entry-point l@ .
-
-3DE00000 dol-entry-point l@ 10 rshift or . \ lis r15, dol-entry-point@ha 
-cr
-61EF0000 dol-entry-point l@ 0000ffff and or . \ ori r15, r15, dol-entry-point@l
-cr
 \ TODO: load DOL (use temporary virtual addresses mapped to the paddr that is later going to be mapped to the right GC memory locations with BAT, can't be done immediately because of overlap with mac-io at 0x80000000) 
 
 \ TODO: write PS instructions patcher and patch paired single instrs
@@ -47,6 +41,9 @@ cr
 load-bat-jump-to-entry
 
 blink-screen
+
+e0000000 100 dump
+
 
 ." loop." cr
 1 0 do 0 +loop
