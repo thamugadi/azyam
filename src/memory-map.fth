@@ -1,4 +1,5 @@
-\ relevant: https://el.dolphin-emu.org/blog/2016/09/06/booting-the-final-gc-game/?cr=el
+\ relevant: https://hitmen.c02.at/files/yagcd/yagcd/chap4.html
+\ https://el.dolphin-emu.org/blog/2016/09/06/booting-the-final-gc-game/?cr=el
 
 \ physical memory:
 create main-memory-paddr 4 allot

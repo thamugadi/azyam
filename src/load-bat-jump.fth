@@ -24,7 +24,6 @@
 ;
 
 : asm-enable-interrupts
-  
   7C6000A6 , \ mfmsr r3
   60638000 , \ ori r3, r3, 0x8000
   7C600124 , \ mtmsr r3
@@ -52,7 +51,6 @@
 ;
 
 : asm-set-ibat ( mask-valid bepi ibat pp wimg -- )
-  
   7C832378 , \ mr r3, r4
   
   3 lshift or 60630000 or ,   \ ori r3, r3, WIMG0PP
@@ -62,11 +60,9 @@
   swap 60630000 or ,          \ ori r3, r3, mask-valid 
   11 lshift 7C7083A6 or ,     \ mtibatu ibat, r3
   4C00012C ,                  \ isync
-
 ;
 
 : asm-set-dbat ( mask-valid bepi dbat pp wimg -- )
-  
   7C832378 , \ mr r3, r4
 
   3 lshift or 60630000 or ,   \ ori r3, r3, WIMG0PP
@@ -88,6 +84,8 @@ asm-invalidate-bat-registers
 \ todo: figure out WIMG and how i should treat regions supposed to be cached memory
 
 \ note that 0x80000000 region is mapped to mac-io through page tables; those BATs are overriding this mapping
+\ https://hitmen.c02.at/files/yagcd/yagcd/chap4.html
+
 mask-32-mib-vs-vp 8000 0 pp-rw wimg-uncached-ibat asm-set-ibat
 mask-32-mib-vs-vp 8000 0 pp-rw wimg-uncached-dbat asm-set-dbat
 
@@ -104,6 +102,7 @@ asm-enable-interrupts
 60630000 dol-entry-point l@ 0000ffff and or , \ ori r3, r3, dol-entry-point@l
 
 \ (for testing, this patches entry point to contain framebuffer-altering code as no DOL loading is implemented yet) 
+\ TODO: test cached code
 
 7C651B78 , \ mr r5, r3
 3C803C60 , \ lis r4, 0x3C60
