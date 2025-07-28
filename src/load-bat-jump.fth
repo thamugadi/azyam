@@ -115,7 +115,7 @@ frame-buffer-adr 0000ffff and 60840000 or , \ ori r4, r4, frame-buffer-adr@l
 90830000 , \ stw r4, 0(r3)
 38630004 , \ addi r3, r3, 4
 3C803C80 , \ lis r4, 0x3c80
-6084BF00 , \ ori r4, r4, 0xBF00
+frame-buffer-adr 10 rshift 300 + 60840000 or , \ ori r4, r4, frame-buffer-adr@ha + 0x300
 90830000 , \ stw r4, 0(r3)
 38630004 , \ addi r3, r3, 4
 3C806084 , \ lis r4, 0x6084
