@@ -7,7 +7,10 @@ create text-load-sizes 7 4 * allot
 create data-load-sizes 11 4 * allot
 create bss-addr 4 allot
 create bss-size 4 allot
-80003140 dol-entry-point l!
 
-: map-tmp-vmem ;
-: load-dol ;
+80003140 dol-entry-point l! \ temporary
+
+: map-tmp-vmem ; \ TODO: use a temporary virtual mapping for MEM1
+: load-dol ; \ TODO: load main.dol from disk-device-path
+
+: unmap-tmp-vmem ; \ TODO
