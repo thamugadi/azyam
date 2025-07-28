@@ -18,7 +18,7 @@
   3C80FFFF , \ lis r4, 0xffff 
 
   60847FFF , \ ori r4, r4, 0x7fff
-  7C632038,  \ and r3, r3, r4
+  7C632038 , \ and r3, r3, r4
   7C600124 , \ mtmsr r3
   4C00012C , \ isync
 ;
@@ -81,8 +81,8 @@
 ;
 
 code load-bat-jump-to-entry
-asm-disable-interrupts
 \ r4 <- physical address of main memory
+asm-disable-interrupts
 main-memory-paddr l@ asm-set-brpn
 asm-invalidate-bat-registers
 \ todo: figure out WIMG and how i should treat regions supposed to be cached memory
@@ -100,16 +100,59 @@ mask-256-kib-vs-vp e000 3 pp-rw wimg-uncached-dbat asm-set-dbat
 
 asm-enable-interrupts
 
-3C800000 dol-entry-point l@ 10 rshift or , \ lis r4, dol-entry-point@ha 
-60840000 dol-entry-point l@ 0000ffff and or , \ ori r4, dol-entry-point@l
+3C600000 dol-entry-point l@ 10 rshift or , \ lis r3, dol-entry-point@ha 
+60630000 dol-entry-point l@ 0000ffff and or , \ ori r3, r3, dol-entry-point@l
 
-\ (for testing, patch entry point to contain b $ as no DOL loading is implemented yet) 
-3C604800 , \ lis r3, 0x4800 (b $)
-90640000 , \ stw r3, 0(r4)
-7C8803A6 , \ mtlr r4 
+\ (for testing, this patches entry point to contain framebuffer-altering code as no DOL loading is implemented yet) 
+
+7C651B78 , \ mr r5, r3
+3C803C60 , \ lis r4, 0x3C60
+frame-buffer-adr 10 rshift 60840000 or , \ ori r4, r4, frame-buffer-adr@ha 
+90830000 , \ stw r4, 0(r3)
+38630004 , \ addi r3, r3, 4
+3C806063 , \ lis r4, 0x6063
+frame-buffer-adr 0000ffff and 60840000 or , \ ori r4, r4, frame-buffer-adr@l 
+90830000 , \ stw r4, 0(r3)
+38630004 , \ addi r3, r3, 4
+3C803C80 , \ lis r4, 0x3c80
+6084BF00 , \ ori r4, r4, 0xBF00
+90830000 , \ stw r4, 0(r3)
+38630004 , \ addi r3, r3, 4
+3C806084 , \ lis r4, 0x6084
+60840000 , \ ori r4, r4, 0
+90830000 , \ stw r4, 0(r3)
+38630004 , \ addi r3, r3, 4
+3C8038A0 , \ lis r4, 0x38a0
+60840021 , \ ori r4, r4, 0x21
+90830000 , \ stw r4, 0(r3)
+38630004 , \ addi r3, r3, 4
+3C8098A3 , \ lis r4, 0x98a3
+60840000 , \ ori r4, r4, 0
+90830000 , \ stw r4, 0(r3)
+38630004 , \ addi r3, r3, 4
+3C803863 , \ lis r4, 0x3863
+60840001 , \ ori r4, r4, 1
+90830000 , \ stw r4, 0(r3)
+38630004 , \ addi r3, r3, 4
+3C807C03 , \ lis r4, 0x7c03
+60842040 , \ ori r4, r4, 0x2040
+90830000 , \ stw r4, 0(r3)
+38630004 , \ addi r3, r3, 4
+3C804180 , \ lis r4, 0x4180
+6084FFF4 , \ ori r4, r4, 0xfff4
+90830000 , \ stw r4, 0(r3)
+38630004 , \ addi r3, r3, 4
+3C804E80 , \ lis r4, 0x4e80
+60840020 , \ ori r4, r4, 0x20
+90830000 , \ stw r4, 0(r3)
+
+38630004 , \ addi r3, r3, 4
+
+3C804800 , \ lis r4, 0x4800
+90830000 , \ stw r4, 0(r3)
+7CA803A6 , \ mtlr r5 
 
 \ TODO: set registers, etc
-
 \ jump to the game
 
 4E800020 , \ blr

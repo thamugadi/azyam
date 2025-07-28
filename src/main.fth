@@ -12,7 +12,7 @@ disk-device-path 100 accept
 disk-device-path-size l!
 cr
 
-\ allocate memory, the mapping is to be replaced by page table loader
+\ done: allocate memory, the mapping is to be replaced by page table loader
 init-memory-map
 
 \ TODO: load DOL (use temporary virtual addresses mapped to the paddr that is later going to be mapped to the right GC memory locations with BAT, can't be done immediately because of overlap with mac-io at 0x80000000) 
@@ -20,7 +20,6 @@ init-memory-map
 \ TODO: write PS instructions patcher and patch paired single instrs
 
 \ TODO: patch the BAT-related instructions with NOPs
-
 
 \ TODO: write hardware handler. a call to it is going to be inserted at the place of the instruction that attempted once to access hwregs
 \       note that it will also handle the case where that instruction might not access to an hwreg, if executed in another execution flow
@@ -36,14 +35,7 @@ init-memory-map
 
 \ TODO: save vaddr mapping
 
-\ TODO: add assembler? 
+\ TODO: add an assembler? 
+replace-main-handler-stub
 
 load-bat-jump-to-entry
-
-blink-screen
-
-e0000000 100 dump
-
-
-." loop." cr
-1 0 do 0 +loop
