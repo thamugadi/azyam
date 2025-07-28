@@ -1,4 +1,4 @@
-# azyam
+# ⴰⵣⵢⴰⵎ azyam
 OpenFirmware-level GameCube emulator / hypervisor for PowerPC Macs.
 
 This repository is currently a mere set of ideas for making an OpenFirmware bootinfo.txt file that would turn a PowerPC-based Macintosh into a fake GameCube / Wii.
