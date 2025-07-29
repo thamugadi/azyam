@@ -28,7 +28,7 @@ init-memory-map
 \ TODO: write hwreg access patcher (responsible for doing the patching mentioned above after each DSI exception subsequent to a hwreg access)
 \       and redirect memory faults to it 
 
-\ TODO: (not very useful) write a handler for alignment exception to support (rare) unaligned memory accesses, that Broadway supports (unsure, i don't know if host architecture supports them)
+\ TODO: (not very useful) write a handler for alignment exception to support (rare) unaligned memory accesses, that Broadway supports (unsure, i don't know if host architecture already supports them)
 
 \ TODO: patch the external interrupt handlers to emulate an input that is going to be handled by the GC's external interrupt handler.
 \       verify first if OF has no problem getting those interrupt handlers rewritten.

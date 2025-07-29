@@ -1,7 +1,7 @@
 # ⴰⵣⵢⴰⵎ azyam
 This repository is currently a mere set of ideas for making an OpenFirmware bootinfo.txt file that would turn a PowerPC-based Macintosh into a fake GameCube / Wii. Nothing is really implemented yet, [except memory mapping](src/load-bat-jump.fth).
 
-[main.fth](src/main.fth) gives an attempt of establishing an outline for such a project. Globally, the idea is:
+[main.fth](src/main.fth)'s comments describe an outline for such a project. Globally, the idea is:
 
 - rewrite all exception handlers for them to handle any access to the hardware registers, that is going to result in a patch of the caller instruction. it's going to be replaced by a call to an "emulator", that will handle both the case where the patched instruction may access a regular memory address, and the one where it must interact with gamecube's hw.
 - rewrite interrupt handlers to emulate real gamecube's interrupt sources (controller input)
@@ -13,9 +13,10 @@ This repository is currently a mere set of ideas for making an OpenFirmware boot
 
 notes :
 
-- i've also thought of including each emulator module in every exception handler, and doing the same for the paired single handlers. this would probably be way too slow and cost significantly more cycles than having a "normal" handler getting called
+- i've also thought of including the hardware registers emulator directly in exception handlers, and doing the same for the paired single emulator. this would probably be way too slow (would fault on more than half the instructions) and cost significantly more cycles than having a "normal" handler getting called
 
 - i'm not sure using BAT registers is more efficient than page tables here. this is going to require me to invalidate them each time i go through a handler, as those are probably going to make use of OpenFirmware primitives.
+
 
 
 for now, the project contains a very small snippet of code, meant to alter the (powermac-mapped) framebuffer, running in fake gamecube mode.
