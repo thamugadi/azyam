@@ -19,7 +19,7 @@ notes :
 
 - it would be VERY useful to add powerpc mnemonics to the Forth environment, in order to avoid massively hardcode instructions like in [load-bat-jump.fth](src/load-bat-jump.fth)
 
-- a trick is used for ``load-bat-jump-to-entry`` to allow for delayed compilation of a ``code`` / ``end-code`` block: space is allocatedfor that block, and a colon definition is responsible for setting the dictionary pointer at the beginning of the block and filling it with instructions. as it's probable there will be the need to dynamically assemble blocks of instructions, it might be good to simplify the process with wrappers
+- a trick is used for ``load-bat-jump-to-entry`` to allow for delayed compilation of a ``code`` / ``end-code`` block: space is allocated for that block, and a colon definition is responsible for setting the dictionary pointer at the beginning of it and filling it with instructions. as it's probable there will be the need to dynamically assemble blocks of instructions, it might be good to simplify the process with wrappers (that would automatically get the size to allocate)
 
 - add a ``test`` folder at the root of the repo to include it in the APM image. useful for testing
 
