@@ -1,6 +1,6 @@
-dev /aliases
-.properties
-dev /
+\ dev /aliases
+\ .properties
+\ dev /
 
 ." enter the mounted disk device path that has 'sys' and 'files' at its root, with the final \" cr
 ." example: usb1/disk:2,\test\" cr
@@ -14,9 +14,7 @@ disk-device-path-size l!
 cr
 
 \ allocates memory, the mapping is to be replaced by page table loader
-init-memory-map
-
-load-dol
+init-physical-memory
 
 \ loads DOL (use temporary virtual addresses mapped to the paddr that is later going to be mapped to the right GC memory locations with BAT, can't be done immediately because of overlap with mac-io at 0x80000000) 
 
@@ -41,7 +39,9 @@ load-dol
 \ TODO: save vaddr mapping
 
 \ TODO: add an assembler? 
+
+\ replacing 0x1E0 (a routine called by exception handlers) code by 'mfspr r0, 0x110; rfi ' (actual replacement isn't implemented yet) 
 replace-main-handler-stub
 
-\ this currently doesn't work as it got compiled when dol-entry-point was uninitialized
+compile-load-bat-jump-to-entry
 load-bat-jump-to-entry

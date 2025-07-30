@@ -1,11 +1,11 @@
 # ⴰⵣⵢⴰⵎ azyam
-This repository is currently a mere set of ideas for making an OpenFirmware bootinfo.txt file that would turn a PowerPC-based Macintosh into a fake GameCube / Wii. Nothing is really implemented yet, [except memory mapping](src/load-bat-jump.fth).
+This repository is currently a mere set of ideas for making an OpenFirmware bootinfo.txt file that would turn a PowerPC-based Macintosh into a fake GameCube / Wii. Nothing is really implemented yet, except [memory mapping](src/load-bat-jump.fth) and [DOL loading](src/dol-loader.fth).
 
 [main.fth](src/main.fth)'s comments describe an outline for such a project. Globally, the idea is:
 
 - rewrite all exception handlers for them to handle any access to the hardware registers, that is going to result in a patch of the caller instruction. it's going to be replaced by a call to an "emulator", that will handle both the case where the patched instruction may access a regular memory address, and the one where it must interact with gamecube's hw.
 - rewrite interrupt handlers to emulate real gamecube's interrupt sources (controller input)
-- allocate enough memory for MEM1, EFB and L2 cache ([memory-map.fth](src/memory-map.fth))
+- allocate enough memory for MEM1, EFB and L2 cache ([physical-memory.fth](src/physical-memory.fth))
 - load the DOL executable file ([dol-loader.fth](src/dol-loader.fth))
 - patch every paired single instruction to a call to a handler (possibly making use of AltiVec? if relevant, yet to figure out)
 - patch the early code dedicated to loading BAT registers (possibly also handle a few [corner cases](https://dolphin-emu.org/blog/2016/09/06/booting-the-final-gc-game/) but it's a bit early to think about it)
@@ -19,10 +19,11 @@ notes :
 
 - it would be VERY useful to add powerpc mnemonics to the Forth environment, in order to avoid massively hardcode instructions like in [load-bat-jump.fth](src/load-bat-jump.fth)
 
-(todo: list what's currently done)
+- a trick is used for ``load-bat-jump-to-entry`` to allow for delayed compilation of a ``code`` / ``end-code`` block: space is allocatedfor that block, and a colon definition is responsible for setting the dictionary pointer at the beginning of the block and filling it with instructions. as it's probable there will be the need to dynamically assemble blocks of instructions, it might be good to simplify the process with wrappers
 
+- add a ``test`` folder at the root of the repo to include it in the APM image. useful for testing
 
-for now, the project contains a very small snippet of code, meant to alter the (powermac-mapped) framebuffer, running in fake gamecube mode.
+for now, the program will patch the loaded DOL to contain a very small snippet of code at its entry point, meant to alter the (powermac-mapped) framebuffer, running in fake gamecube mode. this is only to test that it's able to jump to 0x80000000 after ``mac-io`` has been unmapped and the new BAT registers have been loaded.
 
 this framebuffer demo works well with OpenFirmware 4.7.1f1, on a PowerBook G4. it failed to run on two iBook G3s though.
 

@@ -24,7 +24,7 @@ DISK.APM: build/bootinfo.txt
 		if [ "$$ans" = "y" ] || [ "$$ans" = "Y" ]; then $(MAKE) clean && $(MAKE); fi; \
 	fi
 build/bootinfo.txt: src/init.fth src/lib.fth \
-	      src/memory-map.fth \
+	      src/physical-memory.fth \
 	      src/disk.fth src/dol-loader.fth \
 	      src/ai.fth src/cp.fth src/di.fth src/dsp.fth src/exi.fth src/mi.fth src/pe.fth src/pi.fth src/si.fth src/vi.fth \
 	      src/gx.fth \

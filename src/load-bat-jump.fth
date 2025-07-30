@@ -77,7 +77,16 @@
   4C00012C ,                  \ isync
 ;
 
-code load-bat-jump-to-entry
+\ i have to do this trick, because the code depends on dol-entry-point whose value is not available at compile time
+\ TODO? find a better trick?
+
+code load-bat-jump-to-entry 400 allot end-code \ MAX SIZE: 256 instructions
+
+: compile-load-bat-jump-to-entry
+here ['] load-bat-jump-to-entry over - allot
+
+\ now what's going to be specified with ',' is located at the beginning of load-bat-jump-to-entry
+
 \ r4 <- physical address of main memory
 asm-disable-interrupts
 main-memory-paddr l@ asm-set-brpn
@@ -157,4 +166,6 @@ frame-buffer-adr 10 rshift 300 + 60840000 or , \ ori r4, r4, frame-buffer-adr@ha
 
 4E800020 , \ blr
 
-end-code
+here ['] load-bat-jump-to-entry - allot 
+
+;

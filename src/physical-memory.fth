@@ -4,7 +4,7 @@
 \ physical memory:
 create main-memory-paddr 4 allot
 
-: init-memory-map
+: init-physical-memory 
   
 \ 24 MiB (MEM1) + 8 MiB of padding (32 MiB mapped in BATs instead of 24 MiB) + 2 MiB (EFB) + 16 KiB (cache) + 240 KiB of padding
 \ (256 KiB mapped in BATs instead of 16 KiB)
