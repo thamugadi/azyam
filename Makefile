@@ -1,7 +1,7 @@
 PPC = powerpc-eabi
 DISK.APM: build/bootinfo.txt
 	mkdir -p ./mnt
-	dd bs=1M count=1 if=/dev/zero of=$@
+	dd bs=1M count=1 if=/dev/zero of=$@ # minimum: 1MiB
 	parted $@ --script mklabel mac mkpart primary hfs+ 64s 100%
 
 	set -e; \
@@ -11,8 +11,10 @@ DISK.APM: build/bootinfo.txt
 	sudo mount -o loop $$LOOP ./mnt/; \
 	sudo chmod -R 777 ./mnt
 
-	mkdir -p ./mnt/ppc ./mnt/boot
+	mkdir -p ./mnt/ppc ./mnt/boot ./mnt/test
+
 	rsync -c -h build/bootinfo.txt ./mnt/ppc/
+	if [ -d test ]; then rsync -a test/ ./mnt/test/; fi;
 	sync
 	sudo umount ./mnt/
 	sudo kpartx -d $@ 
@@ -22,8 +24,8 @@ DISK.APM: build/bootinfo.txt
 		if [ "$$ans" = "y" ] || [ "$$ans" = "Y" ]; then $(MAKE) clean && $(MAKE); fi; \
 	fi
 build/bootinfo.txt: src/init.fth src/lib.fth \
-	      src/disk.fth src/dol-loader.fth \
 	      src/memory-map.fth \
+	      src/disk.fth src/dol-loader.fth \
 	      src/ai.fth src/cp.fth src/di.fth src/dsp.fth src/exi.fth src/mi.fth src/pe.fth src/pi.fth src/si.fth src/vi.fth \
 	      src/gx.fth \
 	      src/ps-instr-patcher.fth \

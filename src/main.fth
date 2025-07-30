@@ -2,7 +2,8 @@ dev /aliases
 .properties
 dev /
 
-." enter the mounted disk device path (sys/ and files/ at its root):" cr
+." enter the mounted disk device path that has 'sys' and 'files' at its root, with the final \" cr
+." example: usb1/disk:2,\test\" cr
 \ dol is at sys/main.dol
 
 \ stores the disk device path as a string, as well as its size.
@@ -12,10 +13,14 @@ disk-device-path 100 accept
 disk-device-path-size l!
 cr
 
-\ done: allocate memory, the mapping is to be replaced by page table loader
+\ allocates memory, the mapping is to be replaced by page table loader
 init-memory-map
 
-\ TODO: load DOL (use temporary virtual addresses mapped to the paddr that is later going to be mapped to the right GC memory locations with BAT, can't be done immediately because of overlap with mac-io at 0x80000000) 
+load-dol
+
+\ loads DOL (use temporary virtual addresses mapped to the paddr that is later going to be mapped to the right GC memory locations with BAT, can't be done immediately because of overlap with mac-io at 0x80000000) 
+
+load-dol
 
 \ TODO: write PS instructions patcher and patch paired single instrs
 
@@ -38,4 +43,5 @@ init-memory-map
 \ TODO: add an assembler? 
 replace-main-handler-stub
 
+\ this currently doesn't work as it got compiled when dol-entry-point was uninitialized
 load-bat-jump-to-entry

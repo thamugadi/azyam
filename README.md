@@ -17,6 +17,9 @@ notes :
 
 - i'm not sure using BAT registers is more efficient than page tables here. this is going to require me to invalidate them each time i go through a handler, as those are probably going to make use of OpenFirmware primitives.
 
+- it would be VERY useful to add powerpc mnemonics to the Forth environment, in order to avoid massively hardcode instructions like in [load-bat-jump.fth](src/load-bat-jump.fth)
+
+(todo: list what's currently done)
 
 
 for now, the project contains a very small snippet of code, meant to alter the (powermac-mapped) framebuffer, running in fake gamecube mode.

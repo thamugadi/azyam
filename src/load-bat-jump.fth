@@ -98,8 +98,8 @@ mask-2-mib-vs-vp c800 2 pp-rw wimg-uncached-dbat asm-set-dbat
 mask-256-kib-vs-vp e000 3 pp-rw wimg-uncached-dbat asm-set-dbat
 
 asm-enable-interrupts
-
-3C600000 dol-entry-point l@ 10 rshift or , \ lis r3, dol-entry-point@ha 
+ 
+3C600000 dol-entry-point l@ 10 rshift or , \ lis r3, dol-entry-point@ha
 60630000 dol-entry-point l@ 0000ffff and or , \ ori r3, r3, dol-entry-point@l
 
 \ (for testing, this patches entry point to contain framebuffer-altering code as no DOL loading is implemented yet) 
