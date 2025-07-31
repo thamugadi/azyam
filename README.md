@@ -23,9 +23,11 @@ notes :
 
 - add a ``test`` folder at the root of the repo to include it in the APM image. useful for testing
 
+- at this point it is still blurry in my head to figure how the graphics would possibly be handled in the future. OpenFirmware does not abstract any interface with graphic cards, so that would probably require to find official documents for the integrated GPUs.
+
 for now, the program will patch the loaded DOL to contain a very small snippet of code at its entry point, meant to alter the (powermac-mapped) framebuffer, running in fake gamecube mode. this is only to test that it's able to jump to 0x80000000 after ``mac-io`` has been unmapped and the new BAT registers have been loaded.
 
-this framebuffer demo works well with OpenFirmware 4.7.1f1, on a PowerBook G4. it failed to run on two iBook G3s though.
+this framebuffer demo works well with OpenFirmware 4.7.1, on a PowerBook G4. it failed to run on two iBook G3s though.
 
 # 28/07/2025
 
